@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<style type="text/css">
+     .myDiv { opacity: 0.4; }
+</style>
+
+<html>
+  <head>
+    <title>Bootstrap 101 Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <meta charset="utf-8" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <body>
+<div class="alert alert-block">
+    <h1>Guess Who!</h1>
+</div>
+    <% "rfoo = #{session.inspect}" %>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+<table>
+<tr>
+<%= formStr = "<form method=\"POST\" action=\"/result/all/#{user}\">" %>
+	<% itemCnt.times do |val| %>
+	<td>
+		<% str = "<img src = \"/download#{val}.jpeg\">" %>
+    	<% if (session["#{user}#{val}"] == "on") %>
+        	<div class="myDiv">
+        	<%= str %>
+        	</div>
+    	<% else %>
+        	<%= str %>
+   	<% end %> 
+   </td> 
+   <% end %>
+
+    <label class="checkbox">
+    <tr>
+   	<% itemCnt.times do |val| %>
+    		<% if (session["#{user}#{val}"] == "on") %>
+		<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{val}' checked> Ruled Out" %>
+		<%else%>
+		<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{val}' > Select" %>
+		<%end %>
+		<td> <%= str %> </td>
+	<% end %>
+    <td><button type="submit" class="btn">Submit</button></td>
+    </tr>
+    </label>
+</form>
+</table>
+<table>
+    <tr>
+<td>
+	<% val = session["#{user}Rand"]; %>
+	<% str = "<img src = \"/download#{val}.jpeg\">" %>
+	<%= str %>
+</td>
+<td>
+
+<pre id='chat'></pre>
+<script>
+  // reading
+  var es = new EventSource('/stream');
+  es.onmessage = function(e) { $('#chat').append(e.data + "\n") };
+</script>
+<form name="myform">
+  <input id='msg' placeholder='type message here...' />
+</form>
+
+
+<script>
+  // writing
+  $('form[name=myform]').on('submit',function(e) {
+    $.post('/', {msg: "<%= user %>: " + $('#msg').val()});
+    $('#msg').val(''); $('#msg').focus();
+    e.preventDefault();
+  });
+</script>
+</td>
+</tr>
+</table>
+  </body>
+</html>
