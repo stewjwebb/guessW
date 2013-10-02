@@ -21,28 +21,40 @@
 <table>
 <tr>
 <%= formStr = "<form method=\"POST\" action=\"/result/all/#{user}\">" %>
-	<% itemCnt.times do |val| %>
+	<% lcnt0 = 0 %>
+	<% lcnt1 = 0 %>
+	<% while(lcnt0 < itemCnt)%>
+	<tr>
+	<% 8.times do |val| %>
+		<% if (lcnt0 < itemCnt) %>
 	<td>
-		<% str = "<img src = \"/dl#{val}.jpg\">" %>
-    	<% if (session["#{user}#{val}"] == "on") %>
+		<% str = "<img src = \"/dl#{lcnt0}.jpg\">" %>
+    	<% if (session["#{user}#{lcnt0}"] == "on") %>
         	<div class="myDiv">
         	<%= str %>
         	</div>
     	<% else %>
         	<%= str %>
-   	<% end %> 
+   		<% end %> 
    </td> 
+	<% end %>
+	<% lcnt0 += 1 %>
    <% end %>
+	</tr>
 
     <label class="checkbox">
     <tr>
-   	<% itemCnt.times do |val| %>
-    		<% if (session["#{user}#{val}"] == "on") %>
-		<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{val}' checked> Ruled Out" %>
+   	<% 8.times do |val| %>
+		<% if (lcnt1 < itemCnt) %>
+    	<% if (session["#{user}#{lcnt1}"] == "on") %>
+			<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{lcnt1}' checked> Ruled Out" %>
 		<%else%>
-		<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{val}' > Select" %>
+			<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{lcnt1}' > Select" %>
 		<%end %>
 		<td> <%= str %> </td>
+		<% lcnt1 += 1 %>
+		<% end %>
+	<% end %>
 	<% end %>
     <td><button type="submit" class="btn">Submit</button></td>
     </tr>
