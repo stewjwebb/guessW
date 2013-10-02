@@ -23,7 +23,7 @@
 <%= formStr = "<form method=\"POST\" action=\"/result/all/#{user}\">" %>
 	<% itemCnt.times do |val| %>
 	<td>
-		<% str = "<img src = \"/download#{val}.jpeg\">" %>
+		<% str = "<img src = \"/dl#{val}.jpg\">" %>
     	<% if (session["#{user}#{val}"] == "on") %>
         	<div class="myDiv">
         	<%= str %>
@@ -53,7 +53,7 @@
     <tr>
 <td>
 	<% val = session["#{user}Rand"]; %>
-	<% str = "<img src = \"/download#{val}.jpeg\">" %>
+	<% str = "<img src = \"/dl#{val}.jpg\">" %>
 	<%= str %>
 </td>
 <td>

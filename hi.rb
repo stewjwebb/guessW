@@ -8,8 +8,9 @@ set :server, 'thin'
 connections = []
 enable :sessions
 
+
 def itemCnt
-	@itemCnt = 4
+	@itemCnt = $picCnt
 end  
 
 def genQuery(params)
@@ -53,6 +54,27 @@ end
 post '/' do
   connections.each { |out| out << "data: #{params[:msg]}\n\n" }
   204 # response without entity body
+end
+
+if(__FILE__ == $0 )
+	puts "hello"
+	puts `ls public`
+	cnt =0
+	puts "DIRDIR"
+	dir = "public"
+	Dir.entries(dir).each do |ff|
+		if(ff =~ /\.jpeg/)
+			str = "cp #{dir}/#{ff} #{dir}/dl#{cnt}.jpg"
+		    `#{str}`
+			cnt += 1
+			
+		end
+	end
+	$picCnt = cnt
+	puts "DIRDIR"
+	Dir.entries(dir).each do |ff|
+		puts ff
+	end
 end
 
 __END__
