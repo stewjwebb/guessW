@@ -21,7 +21,8 @@ end
 
 get '/' do  
   if(params[:user])
-	session["#{params[:user]}Rand"] = rand(4) unless(session["#{params[:user]}Rand"])
+    session[:user] = params[:user]
+	  session["#{params[:user]}Rand"] = rand(4) unless(session["#{params[:user]}Rand"])
   	erb :index, :locals => { :user => params[:user].gsub(/\W/, '') }
   else
   	halt erb(:login)
@@ -30,15 +31,15 @@ end
 
 post '/result/all/:user' do 
     itemCnt.times do |val|
-        session["#{params[:user]}#{val}"] = "off"
+        session["#{session[:user]}#{val}"] = "off"
     end
     @test2 = params['check'] 
     if(!@test2.nil?)
     	@test2.each do |val|
-    		session[val.sub(/items/, "#{params[:user]}")] = "on"
+    		session[val.sub(/items/, "#{session[:user]}")] = "on"
     	end 
      end
-    redirect "/?user=#{params[:user]}"
+    redirect "/?user=#{session[:user]}"
 end
   
 
@@ -54,6 +55,11 @@ end
 post '/' do
   connections.each { |out| out << "data: #{params[:msg]}\n\n" }
   204 # response without entity body
+end
+
+put '/pick/:id' do |id|
+  lc = session["pick#{id}"]  
+  session["pick#{id}"]  = !lc
 end
 
 if(__FILE__ == $0 )
