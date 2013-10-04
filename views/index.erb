@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <style type="text/css">
-     .myDiv { opacity: 0.4; }
+     .picked { opacity: 0.4; }
 </style>
 
 <html>
   <head>
     <title>Bootstrap 101 Template</title>
+    <%= session.inspect %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta charset="utf-8" />
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <body>
@@ -20,77 +21,32 @@
     <script src="js/bootstrap.min.js"></script>
 <table>
 <tr>
-<%= formStr = "<form method=\"POST\" action=\"/result/all/#{user}\">" %>
-	<% lcnt0 = 0 %>
-	<% lcnt1 = 0 %>
-	<% while(lcnt0 < itemCnt)%>
-	<tr>
-	<% 8.times do |val| %>
-		<% if (lcnt0 < itemCnt) %>
-	<td>
-		<% str = "<img src = \"/dl#{lcnt0}.jpg\">" %>
-    	<% if (session["#{user}#{lcnt0}"] == "on") %>
-        	<div class="myDiv">
-        	<%= str %>
-        	</div>
-    	<% else %>
-        	<%= str %>
-   		<% end %> 
-   </td> 
-	<% end %>
-	<% lcnt0 += 1 %>
-   <% end %>
-	</tr>
 
-    <label class="checkbox">
-    <tr>
-   	<% 8.times do |val| %>
-		<% if (lcnt1 < itemCnt) %>
-    	<% if (session["#{user}#{lcnt1}"] == "on") %>
-			<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{lcnt1}' checked> Ruled Out" %>
-		<%else%>
-			<% str = "<input type=\"checkbox\" id=\"checkbox\" name='check[]' value='items#{lcnt1}' > Select" %>
-		<%end %>
-		<td> <%= str %> </td>
-		<% lcnt1 += 1 %>
-		<% end %>
-	<% end %>
-	<% end %>
-    <td><button type="submit" class="btn">Submit</button></td>
-    </tr>
-    </label>
-</form>
+  <% 8.times do |val| %>
+    <%= "</tr><tr>" if(val==4) %>
+      <td class="<%=  session["pick#{val}"] ? 'picked':'notpicked' %>" ><img src = "dl<%=  val  %>.jpg" data-pick="<%= val %>"></td>
+  <% end %>
+</tr>
 </table>
+
 <table>
     <tr>
 <td>
-	<% val = session["#{user}Rand"]; %>
-	<% str = "<img src = \"/dl#{val}.jpg\">" %>
-	<%= str %>
+  <% val = session["#{user}Rand"]; %>
+  <% str = "<img src = \"/dl#{val}.jpg\">" %>
+  <%= str %>
 </td>
 <td>
 
 <pre id='chat'></pre>
-<script>
-  // reading
-  var es = new EventSource('/stream');
-  es.onmessage = function(e) { $('#chat').append(e.data + "\n") };
-</script>
 <form name="myform">
   <input id='msg' placeholder='type message here...' />
 </form>
 
 
-<script>
-  // writing
-  $('form[name=myform]').on('submit',function(e) {
-    $.post('/', {msg: "<%= user %>: " + $('#msg').val()});
-    $('#msg').val(''); $('#msg').focus();
-    e.preventDefault();
-  });
-</script>
 </td>
 </tr>
 </table>
+<script src="/js/app.js" type="application/javascript"> </script>
   </body>
 </html>
